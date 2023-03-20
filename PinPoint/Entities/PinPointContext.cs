@@ -19,6 +19,7 @@ public partial class PinPointContext : IdentityDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
         modelBuilder.Entity<TestTable>(entity =>
         {
             entity
