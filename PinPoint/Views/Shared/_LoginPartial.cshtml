@@ -1,30 +1,44 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.CodeAnalysis.Scripting
 @inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
 
-<link rel="stylesheet" href="~/css/pages/login.css" asp-append-version="true"/>
+<link rel="stylesheet" href="~/css/pages/nav-login-partial.css" asp-append-version="true"/>
 
-<ul class="navbar-nav">
+<ul class="navbar-nav d-flex align-items-center gap-2">
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item">
-            <div class="avatar-wrapper">
-                <img src="~/icons/logo-head.svg" alt="Avatar" class="avatar">
-            </div>
+        <li class="nav-item d-flex align-items-center">
+            <span class="material-icons">notifications</span>
         </li>
-        <li class="nav-item">
-            <form class="logout-form flex" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
-                <div class="button-a">
-                    <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
-                        <button type="submit" class="nav-link btn btn-link">Logout</button>
-                    </a>
-                </div>
-            </form>
+        <li class="nav-item profile-wrapper">
+            <div class="nav-avatar" id="nav-avatar">
+                <img class="nav-avatar__image" src="~/icons/avatar-ex.jpg" alt="nav-avatar"/>
+            </div>
+            <ul class="nav-avatar-dropdown" id="nav-avatar-dropdown" hidden="true">
+                <li class="nav-avatar-dropdown-item">
+                    <div class="nav-avatar-dropdown-item-container">
+                        <span class="material-icons">person</span>
+                        <p>View Profile</p>
+                    </div>
+                </li>
+                <li class="nav-avatar-dropdown-item">
+                    <div class="nav-avatar-dropdown-item-container">
+                        <span class="material-icons">settings</span>
+                        <p>Settings</p>
+                    </div>
+                </li>
+                <li class="nav-avatar-dropdown-item">
+                    <div class="nav-avatar-dropdown-item-container" id="logout-action">
+                        <span class="material-icons">logout</span>
+                        <p>Log Out</p>
+                    </div>
+                </li>
+            </ul>
         </li>
     }
     else
     {
-        <li class="nav-item">
+        <li class="nav-item d-flex align-items-center">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
         </li>
         <li class="nav-item">
@@ -34,3 +48,8 @@
         </li>
     }
 </ul>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <script src="~/js/pages-partial/nav-login-partial.js" ></script>
+}

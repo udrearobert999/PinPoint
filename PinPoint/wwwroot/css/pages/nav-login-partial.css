@@ -1,0 +1,64 @@
+﻿.nav-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    height: 5rem;
+    width: 5rem;
+}
+
+.nav-avatar__image {
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
+}
+
+.nav-avatar:hover {
+    background: var(--gray-bg-focus);
+    cursor: pointer;
+}
+
+.nav-item .profile-wrapper {
+    position: relative;
+    display: flex;
+}
+
+.nav-avatar-dropdown {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    flex-direction: column;
+    margin: 1.2rem .3rem 0 0;
+    box-shadow: var(--elevation-floating);
+    border-radius: var(--radius);
+    width: 14rem;
+    padding: 1rem .5rem 1rem .5rem;
+    background: white;
+}
+
+.nav-avatar-dropdown > li { list-style-type: none; }
+
+.nav-avatar-dropdown-item .nav-avatar-dropdown-item-container {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: 1rem .5rem 1rem .5rem;
+}
+
+.nav-avatar-dropdown-item .nav-avatar-dropdown-item-container > p { margin: 0; }
+
+.nav-avatar-dropdown > li :hover {
+    border-radius: 2rem;
+    background: var(--gray-bg-focus);
+    cursor: pointer;
+}
+
+.nav-item > span { padding: 1rem; }
+
+.nav-item > span:hover {
+    border-radius: 2rem;
+    background: var(--gray-bg-focus);
+    cursor: pointer;
+}

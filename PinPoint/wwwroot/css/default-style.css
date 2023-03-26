@@ -1,5 +1,14 @@
 :root {
     --dark: rgb(17, 17, 17);
     --accent: rgb(244, 104, 107);
-    --radius: 1.625rem;
+    --radius: 2.6rem;
+    --gray-bg: rgb(245, 245, 245);
+    --gray-bg-focus: rgb(225, 225, 225);
+    --accent: rgb(244, 104, 107);
+    --accent-hovered: rgb(224, 84, 87);
+    --elevation-floating: 0 0 8px rgba(0,0,0,0.1);
 }
+
+.accent { background: var(--accent); }
+
+.accent:hover { background: var(--accent-hovered); }

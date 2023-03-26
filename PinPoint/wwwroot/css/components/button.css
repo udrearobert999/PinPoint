@@ -1,0 +1,17 @@
+﻿.button-a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: .3rem;
+    border-radius: var(--radius);
+    background: var(--dark);
+    color: white;
+}
+
+.button-a > a,
+.button-a > a button {
+    text-decoration: none;
+    white-space: nowrap;
+    color: inherit !important;
+    font-size: 1.4rem;
+}
