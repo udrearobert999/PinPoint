@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 
-<link rel="stylesheet" href="~/css/pages/nav-login-partial.css" asp-append-version="true"/>
+<link rel="stylesheet" href="~/css/pages/partial/nav-login-partial.css" asp-append-version="true"/>
 
 <ul class="navbar-nav d-flex align-items-center gap-2">
     @if (SignInManager.IsSignedIn(User))
@@ -54,5 +54,5 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <script src="~/js/pages-partial/nav-login-partial.js"></script>
+    <script src="~/js/pages/partial/nav-login-partial.js"></script>
 }
