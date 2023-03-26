@@ -10,16 +10,9 @@ navAvatar.addEventListener('click', () => {
     navAvatarDropDown.toggleAttribute('hidden');
 })
 
-document.getElementById('logout-action').addEventListener('click', async () => {
-    const respone = await fetch(`/Identity/Account/Logout`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'RequestVerificationToken': getAntiForgeryToken()
-        },
+// Add event handler to every dropdown elements 
+const formsSubmitButtons = document.querySelectorAll('form > .submit')
+for (const button of formsSubmitButtons)
+    button.addEventListener('click', () => {
+        button.parentElement.submit()
     })
-
-    if (respone.ok)
-        window.location.href = '/'; // redirect to main page
-})

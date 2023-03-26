@@ -15,23 +15,27 @@
                 <img class="nav-avatar__image" src="~/icons/avatar-ex.jpg" alt="nav-avatar"/>
             </div>
             <ul class="nav-avatar-dropdown" id="nav-avatar-dropdown" hidden="true">
-                <li class="nav-avatar-dropdown-item">
-                    <div class="nav-avatar-dropdown-item-container">
-                        <span class="material-icons">person</span>
-                        <p>View Profile</p>
-                    </div>
+                <li class="nav-avatar-dropdown-item" id="profile-action">
+                    <form asp-area="Identity" asp-page="/Account/Manage/Index" method="get">
+                        <div class="nav-avatar-dropdown-item-container submit">
+                            <span class="material-icons">person</span>
+                            <p>View Profile</p>
+                        </div>
+                    </form>
                 </li>
                 <li class="nav-avatar-dropdown-item">
-                    <div class="nav-avatar-dropdown-item-container">
+                    <div class="nav-avatar-dropdown-item-container ">
                         <span class="material-icons">settings</span>
                         <p>Settings</p>
                     </div>
                 </li>
                 <li class="nav-avatar-dropdown-item">
-                    <div class="nav-avatar-dropdown-item-container" id="logout-action">
-                        <span class="material-icons">logout</span>
-                        <p>Log Out</p>
-                    </div>
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
+                        <div class="nav-avatar-dropdown-item-container submit" id="logout-action">
+                            <span class="material-icons">logout</span>
+                            <p>Log Out</p>
+                        </div>
+                    </form>
                 </li>
             </ul>
         </li>
@@ -51,5 +55,5 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <script src="~/js/pages-partial/nav-login-partial.js" ></script>
+    <script src="~/js/pages-partial/nav-login-partial.js"></script>
 }
