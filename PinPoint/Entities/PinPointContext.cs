@@ -14,6 +14,8 @@ public partial class PinPointContext : IdentityDbContext<User, IdentityRole<Guid
     public virtual DbSet<Pin> Pins { get; set; } = null!;
     public virtual DbSet<Tag> Tags { get; set; } = null!;
     public virtual DbSet<PinTag> PinTags { get; set; } = null!;
+    public virtual DbSet<PinComment> PinComment { get; set; } = null!;
+    public virtual DbSet<Like> Likes { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -47,6 +49,32 @@ public partial class PinPointContext : IdentityDbContext<User, IdentityRole<Guid
             entity.HasOne<Tag>(e => e.Tag)
                 .WithMany(e => e.PinTags)
                 .HasForeignKey(e => e.TagId);
+        });
+
+        modelBuilder.Entity<PinComment>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.HasOne<Pin>(e => e.Pin)
+                .WithMany(e => e.PinComments)
+                .HasForeignKey(e => e.PinId);
+
+            entity.HasOne<User>(e => e.User)
+                .WithMany(e => e.PinComments)
+                .HasForeignKey(e => e.UserId);
+        });
+
+        modelBuilder.Entity<Like>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.HasOne<Pin>(e => e.Pin)
+                .WithMany(e => e.Likes)
+                .HasForeignKey(e => e.PinId);
+
+            entity.HasOne<User>(e => e.User)
+                .WithMany(e => e.Likes)
+                .HasForeignKey(e => e.UserId);
         });
 
         OnModelCreatingPartial(modelBuilder);

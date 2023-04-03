@@ -11,4 +11,6 @@ public class Pin
     public Guid UserId { get; set; }
 
     public ICollection<PinTag> PinTags { get; set; } = null!;
+    public ICollection<PinComment> PinComments { get; set; } = null!;
+    public ICollection<Like> Likes { get; set; } = null!;
 }
