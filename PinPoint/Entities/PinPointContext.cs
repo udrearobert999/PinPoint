@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace PinPoint.Entities;
 
-public partial class PinPointContext : IdentityDbContext
+public partial class PinPointContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     public PinPointContext(DbContextOptions<PinPointContext> options)
         : base(options)
@@ -17,6 +18,8 @@ public partial class PinPointContext : IdentityDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<User>(entity => { entity.Property(e => e.ProfilePicture); });
 
         modelBuilder.Entity<Tag>(entity =>
         {
