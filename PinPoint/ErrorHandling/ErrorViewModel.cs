@@ -1,4 +1,4 @@
-namespace PinPoint.Models
+namespace PinPoint.ErrorHandling
 {
     public class ErrorViewModel
     {

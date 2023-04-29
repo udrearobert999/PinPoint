@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace PinPoint.Entities;
+namespace Infrastructure.Persistence;
 
 public partial class PinPointContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {

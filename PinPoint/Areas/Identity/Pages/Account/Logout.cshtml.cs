@@ -2,10 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using PinPoint.Entities;
 
 namespace PinPoint.Areas.Identity.Pages.Account
 {

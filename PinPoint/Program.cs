@@ -1,20 +1,19 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using PinPoint.Entities;
+using Application;
+using Infrastructure;
+using PinPoint.Middlewares;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<PinPointContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddRazorPages();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole<Guid>>()
-    .AddEntityFrameworkStores<PinPointContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services
+    .AddInfrastructure(builder.Configuration)
+    .AddApplication();
+
+builder.Host.UseSerilog((context, config) => { config.ReadFrom.Configuration(context.Configuration); });
 
 var app = builder.Build();
 
@@ -28,11 +27,16 @@ else
     app.UseExceptionHandler("/Home/Error");
 }
 
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+app.UseSerilogRequestLogging();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",

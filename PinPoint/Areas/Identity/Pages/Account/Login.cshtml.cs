@@ -3,11 +3,11 @@
 #nullable disable
 
 using System.ComponentModel.DataAnnotations;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using PinPoint.Entities;
 
 namespace PinPoint.Areas.Identity.Pages.Account
 {

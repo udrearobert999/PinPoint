@@ -4,11 +4,11 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using PinPoint.Entities;
 
 namespace PinPoint.Areas.Identity.Pages.Account
 {

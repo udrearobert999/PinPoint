@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PinPoint.Models;
 using System.Diagnostics;
+using PinPoint.ErrorHandling;
 
 namespace PinPoint.Controllers
 {
