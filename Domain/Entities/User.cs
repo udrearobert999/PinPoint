@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class User : IdentityUser<Guid>
+public class User : IdentityUser<Guid>, IEntity<Guid>
 {
     public byte[]? ProfilePicture { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class Tag
+public class Tag: IEntity<Guid>
 {
     public Guid Id { get; set; }
 

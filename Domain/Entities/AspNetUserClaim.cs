@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class AspNetUserClaim
+public class AspNetUserClaim : IEntity<int>
 {
     public int Id { get; set; }
 

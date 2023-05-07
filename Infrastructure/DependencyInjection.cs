@@ -1,6 +1,9 @@
-﻿using Domain.Entities;
+﻿using Domain.Core;
+using Domain.Entities;
 using Infrastructure.Persistence;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +19,15 @@ public static class DependencyInjection
             options.UseSqlServer(configuration.GetConnectionString("PinPointDB"));
         });
 
-        services.AddIdentity<User, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
+        services.AddScoped<DbContext, PinPointContext>();
+
+        services.AddDefaultIdentity<User, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddEntityFrameworkStores<PinPointContext>();
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddTransient<IEmailSender, EmailSenderService>();
+        services.AddTransient<IUserTwoFactorTokenProvider<IdentityUser>, EmailTokenProvider<IdentityUser>>();
 
         return services;
     }

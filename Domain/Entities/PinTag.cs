@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    public class PinTag
+    public class PinTag: IEntity<Guid>
     {
         public Guid Id { get; set; }
         public Guid PinId { get; set; }

@@ -16,8 +16,6 @@ public class TestService : ITestService
 
     public TestEntityDto GenerateTestEntity()
     {
-        var testEntity = new TestEntity("Test", "Test");
-
-        return _mapper.Map<TestEntityDto>(testEntity);
+        return new TestEntityDto();
     }
 }

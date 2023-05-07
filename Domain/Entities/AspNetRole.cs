@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class AspNetRole
+public class AspNetRole : IEntity<string>
 {
     public string Id { get; set; } = null!;
 

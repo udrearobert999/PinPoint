@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class AspNetRoleClaim
+public class AspNetRoleClaim : IEntity<int>
 {
     public int Id { get; set; }
 

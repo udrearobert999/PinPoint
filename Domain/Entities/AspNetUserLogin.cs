@@ -1,7 +1,8 @@
 ﻿namespace Domain.Entities;
 
-public class AspNetUserLogin
+public class AspNetUserLogin: IEntity<Guid>
 {
+    public Guid Id { get; }
     public string LoginProvider { get; set; } = null!;
 
     public string ProviderKey { get; set; } = null!;

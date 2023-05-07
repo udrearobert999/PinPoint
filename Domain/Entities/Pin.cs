@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class Pin
+public class Pin : IEntity<Guid>
 {
     public Guid Id { get; set; }
 
