@@ -1,8 +1,22 @@
-﻿@{
+﻿@model List<Application.Dto.PinDto>
+
+@{
     Layout = "_NavLayout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var pin in Model)
+            {
+                <div class="col-md-4">
+                    <div class="pin-item mb-4">
+                        <img src="@pin.Picture" alt="@pin.Title" class="pin-image">
+                        <h5 class="pin-title">@pin.Title</h5>
+                    </div>
+                </div>
+            }
+        }
+    </div>
 </div>

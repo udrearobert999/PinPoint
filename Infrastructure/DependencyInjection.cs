@@ -1,6 +1,9 @@
-﻿using Domain.Core;
+﻿using Application.Interfaces;
+using Application.Services;
+using Domain.Core;
 using Domain.Entities;
 using Infrastructure.Persistence;
+using Infrastructure.Persistence.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -21,10 +24,15 @@ public static class DependencyInjection
 
         services.AddScoped<DbContext, PinPointContext>();
 
-        services.AddDefaultIdentity<User, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
-            .AddEntityFrameworkStores<PinPointContext>();
+        services.AddIdentity<User, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddEntityFrameworkStores<PinPointContext>()
+            .AddDefaultTokenProviders();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddScoped<IRepository<Pin, Guid>, Repository<Pin, Guid>>();
+        services.AddScoped<IReadOnlyRepository<Pin, Guid>, ReadOnlyRepository<Pin, Guid>>();
+        services.AddScoped<IPinsRepository, PinsRepository>();
 
         services.AddTransient<IEmailSender, EmailSenderService>();
         services.AddTransient<IUserTwoFactorTokenProvider<IdentityUser>, EmailTokenProvider<IdentityUser>>();

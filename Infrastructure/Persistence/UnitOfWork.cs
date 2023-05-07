@@ -1,5 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Domain.Core;
+using Domain.Entities;
+using Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence;
@@ -11,7 +13,12 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(DbContext dbContext)
     {
         _dbContext = dbContext;
+        Users = new Repository<User, Guid>(dbContext);
+        Pins = new PinsRepository(dbContext);
     }
+
+    public IRepository<User, Guid> Users { get; set; }
+    public IPinsRepository Pins { get; set; }
 
     public async Task<int> SaveChangesAsync()
     {
@@ -21,13 +28,6 @@ public class UnitOfWork : IUnitOfWork
     public async Task DisposeAsync()
     {
         await _dbContext.DisposeAsync();
-    }
-
-    public void MarkEntryAsModified<TEntity>(TEntity entity,
-        Expression<Func<TEntity, object>> propertyExpression,
-        bool isModified) where TEntity : class
-    {
-        _dbContext.Entry(entity).Property(propertyExpression).IsModified = isModified;
     }
 
     public int SaveChanges()

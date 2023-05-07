@@ -1,0 +1,20 @@
+﻿.about-container {
+    padding: 2rem;
+    background-color: var(--gray-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--elevation-floating);
+    margin: 3rem auto;
+    max-width: 800px;
+    line-height: 1.6;
+}
+
+    .about-container h1 {
+        color: var(--dark);
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .about-container p {
+        color: var(--dark);
+        font-size: 1.1rem;
+    }

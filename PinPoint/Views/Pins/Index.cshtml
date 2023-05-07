@@ -1,47 +1,116 @@
-﻿@model IEnumerable<Domain.Entities.Pin>
-
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Application.Dto.PinDto
 @{
-    ViewData["Title"] = "Index";
+    Layout = "_NavLayout";
 }
 
-<h1>Index</h1>
+<h1 class="text-center">Create Pin</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Picture)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Picture)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label">Title</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Picture" class="control-label">Picture</label>
+                    <div class="custom-file">
+                        <input asp-for="Picture" class="custom-file-input" onchange="loadFile(event)" />
+                        <label class="custom-file-label" for="Picture">Choose file</label>
+                    </div>
+                    <span asp-validation-for="Picture" class="text-danger"></span>
+                </div>
+                <div class="image-container">
+                    <img id="imagePreview" src="#" alt="Image Preview" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="default-button" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function loadFile(event) {
+        var output = document.getElementById('imagePreview');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = () => {
+            URL.revokeObjectURL(output.src)
+        }
+    };
+</script>
+
+<style>
+    .image-container {
+        width: 100%;
+        max-width: 50rem;
+        height: auto;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .container { padding: 2rem 0; }
+
+    .custom-file {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        height: calc(1.5em + 0.75rem + 2px);
+        margin-bottom: 0;
+    }
+
+    .custom-file-input {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: calc(1.5em + 0.75rem + 2px);
+        margin: 0;
+        opacity: 0;
+    }
+
+    .custom-file-label {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1;
+        height: calc(1.5em + 0.75rem + 2px);
+        padding: 0.375rem 0.75rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+    }
+
+    .custom-file-label::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 3;
+        display: block;
+        height: calc(1.5em + 0.75rem);
+        padding: 0.375rem 0.75rem;
+        line-height: 1.5;
+        color: #495057;
+        content: "Browse";
+        background-color: #e9ecef;
+        border-left: inherit;
+        border-radius: 0 0.25rem 0.25rem 0;
+    }
+
+    .custom-file-input:focus ~ .custom-file-label {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 0.2rem rgba(244, 104, 107, 0.25);
+    }
+
+    .custom-file-input:focus ~ .custom-file-label::after { border-color: var(--accent); }
+</style>

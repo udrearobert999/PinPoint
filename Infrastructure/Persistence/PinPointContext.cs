@@ -37,6 +37,8 @@ public partial class PinPointContext : IdentityDbContext<User, IdentityRole<Guid
 
             entity.Property(e => e.Description);
 
+            entity.Property(e => e.Title).IsRequired();
+
             entity.Property(e => e.Picture)
                 .IsRequired();
         });

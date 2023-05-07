@@ -10,15 +10,18 @@
     align-items: center;
 }
 
-#search-input {
+#search-input-form {
+    display: flex;
+    height: 4.5rem;
     flex: 1 1 auto;
+}
 
+#search-input {
     border: none;
     border-radius: var(--radius);
-    height: 4.5rem;
     padding: 0 5.6rem 0 2.4rem;
-
     background: var(--gray-bg);
+    flex: 1 1 auto;
 }
 
 #search-input:hover {
