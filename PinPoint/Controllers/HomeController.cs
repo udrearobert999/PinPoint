@@ -43,14 +43,14 @@ namespace PinPoint.Controllers
             return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
 
-        public async Task<IActionResult> Search(string query)
+        public async Task<IActionResult> Search(string titleQuery)
         {
-            if (string.IsNullOrEmpty(query))
+            if (string.IsNullOrEmpty(titleQuery))
             {
                 return RedirectToAction("Index");
             }
 
-            var pins = await _pinsService.GetPinsByTitleString(query);
+            var pins = await _pinsService.GetPinsByTitleString(titleQuery);
             return View("Index", pins);
         }
     }

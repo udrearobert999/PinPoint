@@ -4,6 +4,13 @@
     Layout = "_NavLayout";
 }
 
+@functions {
+    public string ByteArrayToBase64(byte[] byteArray)
+    {
+        return Convert.ToBase64String(byteArray);
+    }
+}
+
 <div class="container">
     <div class="row">
         @if (Model != null && Model.Any())
@@ -12,7 +19,7 @@
             {
                 <div class="col-md-4">
                     <div class="pin-item mb-4">
-                        <img src="@pin.Picture" alt="@pin.Title" class="pin-image">
+                        <img src="data:image/png;base64,@ByteArrayToBase64(pin.Picture)" alt="@pin.Title" class="pin-image">
                         <h5 class="pin-title">@pin.Title</h5>
                     </div>
                 </div>
@@ -20,3 +27,26 @@
         }
     </div>
 </div>
+
+<style>
+    .pin-item {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        padding: 16px;
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .pin-image {
+        max-width: 100%;
+        border-radius: 4px;
+        margin-bottom: 8px;
+    }
+
+    .pin-title {
+        margin-top: 8px;
+        text-align: center;
+    }
+</style>

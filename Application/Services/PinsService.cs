@@ -24,7 +24,6 @@ namespace Application.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-
         public async Task CreatePin(PinDto pinDto)
         {
             var pin = _mapper.Map<Pin>(pinDto);
@@ -34,13 +33,6 @@ namespace Application.Services
             if (user is null) return;
 
             pin.UserId = user.Id;
-
-            if (pinDto.Picture.Length > 0)
-            {
-                using var memoryStream = new MemoryStream();
-                await pinDto.Picture.CopyToAsync(memoryStream);
-                pin.Picture = memoryStream.ToArray();
-            }
 
             _unitOfWork.Pins.Add(pin);
             await _unitOfWork.SaveChangesAsync();

@@ -19,8 +19,9 @@
                 <div class="form-group">
                     <label asp-for="Picture" class="control-label">Picture</label>
                     <div class="custom-file">
-                        <input asp-for="Picture" class="custom-file-input" onchange="loadFile(event)" />
-                        <label class="custom-file-label" for="Picture">Choose file</label>
+                        <input type="file" id="PictureFile" class="custom-file-input" onchange="loadFile(event)" />
+                        <label class="custom-file-label" for="PictureFile">Choose file</label>
+                        <input asp-for="Picture" type="hidden" />
                     </div>
                     <span asp-validation-for="Picture" class="text-danger"></span>
                 </div>
@@ -38,11 +39,26 @@
 <script>
     function loadFile(event) {
         var output = document.getElementById('imagePreview');
-        output.src = URL.createObjectURL(event.target.files[0]);
+        var pictureInput = document.getElementById('Picture');
+        var file = event.target.files[0];
+
+        output.src = URL.createObjectURL(file);
         output.onload = () => {
             URL.revokeObjectURL(output.src)
         }
+
+        var reader = new FileReader();
+        reader.onload = function () {
+            var byteArray = new Uint8Array(reader.result);
+            var byteArrayString = byteArrayToString(byteArray);
+            pictureInput.value = byteArrayString;
+        };
+        reader.readAsArrayBuffer(file);
     };
+
+    function byteArrayToString(byteArray) {
+        return Array.from(byteArray, byte => String.fromCharCode(byte)).join('');
+    }
 </script>
 
 <style>

@@ -13,7 +13,7 @@ namespace Infrastructure.Persistence.Repositories
         public async Task<List<Pin>> GetPinsByTitleString(string title)
         {
             var pins = await _dbContext.Pins
-                .Where(p => p.Title.Contains(title, StringComparison.OrdinalIgnoreCase))
+                .Where(p => EF.Functions.Like(p.Title, $"%{title}%"))
                 .ToListAsync();
 
             return pins;
