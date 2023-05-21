@@ -24,7 +24,7 @@ public static class DependencyInjection
 
         services.AddScoped<DbContext, PinPointContext>();
 
-        services.AddIdentity<User, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
+        services.AddIdentity<User, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddEntityFrameworkStores<PinPointContext>()
             .AddDefaultTokenProviders();
 
