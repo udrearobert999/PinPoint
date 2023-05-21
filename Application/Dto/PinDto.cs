@@ -7,6 +7,8 @@ namespace Application.Dto
     {
         [Required] public string Title { get; set; } = null!;
 
-        [Required] public byte[] Picture { get; set; } = null!;
+        [Required] public IFormFile PictureUpload { get; set; } = null!;
+
+        public byte[] Picture { get; set; } = null!;
     }
 }   

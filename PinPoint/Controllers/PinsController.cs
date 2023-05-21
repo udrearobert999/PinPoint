@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PinPoint.Controllers
@@ -21,9 +22,13 @@ namespace PinPoint.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Create([Bind("Title,Picture")] PinDto pinDto)
+        public async Task<IActionResult> Create(PinDto pinDto)
         {
-            if (ModelState.IsValid)
+            using var ms = new MemoryStream();
+            await pinDto.PictureUpload.CopyToAsync(ms);
+            pinDto.Picture = ms.ToArray();
+
+            if (pinDto.Picture.Length > 0)
             {
                 await _pinsService.CreatePin(pinDto);
                 return RedirectToAction("Index", pinDto);
