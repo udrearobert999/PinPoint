@@ -1,13 +1,11 @@
 ﻿using Application.Dto;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PinPoint.Controllers
 {
+    [Authorize]
     public class PinsController : Controller
     {
         private readonly IPinsService _pinsService;

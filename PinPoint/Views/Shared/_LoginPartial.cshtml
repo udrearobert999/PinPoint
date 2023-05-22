@@ -30,6 +30,17 @@
                         <p>Settings</p>
                     </div>
                 </li>
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("ADMIN"))
+                {
+                    <li class="nav-avatar-dropdown-item">
+                        <form asp-area="Identity" asp-controller="Admin" asp-action="AdminPanel" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
+                            <div class="nav-avatar-dropdown-item-container submit" id="admin-panel-action">
+                                <span class="material-icons">admin_panel_settings</span>
+                                <p>AdminPanel</p>
+                            </div>
+                        </form>
+                    </li>
+                }
                 <li class="nav-avatar-dropdown-item">
                     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
                         <div class="nav-avatar-dropdown-item-container submit" id="logout-action">

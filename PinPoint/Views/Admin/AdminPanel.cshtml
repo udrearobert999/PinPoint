@@ -1,0 +1,38 @@
+﻿@model Application.Dto.AdminPanelDto
+@{
+    Layout = "_NavLayout";
+}
+
+<h1 class="text-center mb-4">Admin Panel</h1>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <form asp-controller="Admin" asp-action="AddUserToRole">
+                <div class="mb-3">
+                    <label for="user" class="form-label">User</label>
+                    <select asp-for="SelectedUser" asp-items="new SelectList(Model.Users)" class="form-select" id="user">
+                        <option value="">Select user...</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="role" class="form-label">Role</label>
+                    <select asp-for="SelectedRole" asp-items="new SelectList(Model.Roles)" class="form-select" id="role">
+                        <option value="">Select role...</option>
+                    </select>
+                </div>
+
+                <button type="submit" formaction="AddUserToRole" class="btn btn-primary mb-3">Add Role</button>
+                <button type="submit" formaction="RemoveUserFromRole" class="btn btn-danger">Remove Role</button>
+            </form>
+        </div>
+    </div>
+</div>
