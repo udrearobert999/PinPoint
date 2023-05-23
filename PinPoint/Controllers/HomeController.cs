@@ -17,9 +17,11 @@ namespace PinPoint.Controllers
             _pinsService = pinsService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var pins = await _pinsService.GetLastPins(10);
+
+            return View(pins);
         }
 
         public IActionResult Privacy()

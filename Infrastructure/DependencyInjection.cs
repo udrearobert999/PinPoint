@@ -34,6 +34,8 @@ public static class DependencyInjection
         services.AddScoped<IReadOnlyRepository<Pin, Guid>, ReadOnlyRepository<Pin, Guid>>();
         services.AddScoped<IPinsRepository, PinsRepository>();
 
+        services.AddScoped<IRepository<PinComment, Guid>, Repository<PinComment, Guid>>();
+
         services.AddTransient<IEmailSender, EmailSenderService>();
         services.AddTransient<IUserTwoFactorTokenProvider<IdentityUser>, EmailTokenProvider<IdentityUser>>();
 

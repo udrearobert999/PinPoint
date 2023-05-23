@@ -6,6 +6,7 @@ public interface IUnitOfWork
 {
     IRepository<User, Guid> Users { get; set; }
     IPinsRepository Pins { get; set; }
+    IRepository<PinComment, Guid> PinsComment { get; set; }
     public Task<int> SaveChangesAsync();
     public Task DisposeAsync();
 

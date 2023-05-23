@@ -15,10 +15,12 @@ public class UnitOfWork : IUnitOfWork
         _dbContext = dbContext;
         Users = new Repository<User, Guid>(dbContext);
         Pins = new PinsRepository(dbContext);
+        PinsComment = new Repository<PinComment, Guid>(dbContext);
     }
 
     public IRepository<User, Guid> Users { get; set; }
     public IPinsRepository Pins { get; set; }
+    public IRepository<PinComment, Guid> PinsComment { get; set; }
 
     public async Task<int> SaveChangesAsync()
     {

@@ -5,21 +5,23 @@
 }
 
 @functions {
+
     public string ByteArrayToBase64(byte[] byteArray)
     {
         return Convert.ToBase64String(byteArray);
     }
+
 }
 
 <div class="container">
     <div class="row">
-        @if (Model != null && Model.Any())
+        @if (Model.Any())
         {
             foreach (var pin in Model)
             {
                 <div class="col-md-4">
                     <div class="pin-item mb-4">
-                        <img src="data:image/png;base64,@ByteArrayToBase64(pin.Picture)" alt="@pin.Title" class="pin-image">
+                        <img src="data:image/png;base64,@ByteArrayToBase64(pin.Picture)" alt="@pin.Title" class="pin-image" onclick="openModal(this)" id="@pin.Id">
                         <h5 class="pin-title">@pin.Title</h5>
                     </div>
                 </div>
@@ -27,6 +29,47 @@
         }
     </div>
 </div>
+
+<section class="modal hidden">
+    <span class="material-icons btn-close">close</span>
+    <div class="modal-content">
+        <div class="picture-container">
+            <img id="picture" src="" alt="Selected Picture">
+        </div>
+        <div class="comments-container">
+            <div class="comments-list">
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+                <p>asdasd</p>
+            </div>
+            <form id="comment-form" method="POST" action="@Url.Action("AddComment", "Pins")">
+                <div class="input-container">
+                    <input type="text" id="comment-input" name="Message" placeholder="Add a comment...">
+                    <input type="hidden" id="pinId" name="Id" value=""> <!-- You will need to set this value with JavaScript when the modal is opened -->
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<div class="overlay hidden"></div>
 
 <style>
     .pin-item {
@@ -49,4 +92,110 @@
         margin-top: 8px;
         text-align: center;
     }
+
+    .modal {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.4rem;
+        width: 90rem;
+        padding: 2rem;
+        max-height: 55rem;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: var(--radius);
+        z-index: 2;
+    }
+
+    .modal-content {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        border: none;
+        width: 100%;
+        height: 100%;
+    }
+
+    .btn-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        z-index: 1;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(3px);
+        z-index: 1;
+    }
+
+    .hidden { display: none; }
+
+    .picture-container,
+    .comments-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+    }
+
+    #picture {
+        object-fit: contain;
+        height: 100%;
+        width: 100%;
+    }
+
+    .comments-container {
+        display: flex;
+        padding: 3rem;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+    }
+
+    .comments-list {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .input-container { height: 50px; }
+
+    #comment-input {
+        width: 100%;
+        padding: .5rem;
+        box-sizing: border-box;
+        margin-top: 1.5rem
+    }
 </style>
+
+<script>
+    const modal = document.querySelector(".modal");
+    const overlay = document.querySelector(".overlay");
+    const closeModalBtn = document.querySelector(".btn-close");
+
+    function openModal(element) {
+        modal.classList.remove("hidden");
+        overlay.classList.remove("hidden");
+        document.getElementById('picture').src = element.src;
+        document.getElementById('pinId').value = element.id; // Set the pinId here
+    };
+
+    function closeModal() {
+        modal.classList.add("hidden");
+        overlay.classList.add("hidden");
+    };
+
+    closeModalBtn.addEventListener("click", closeModal);
+    overlay.addEventListener("click", closeModal);
+</script>

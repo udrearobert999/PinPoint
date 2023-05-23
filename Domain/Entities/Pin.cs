@@ -8,7 +8,7 @@ public class Pin : IEntity<Guid>
     public string? Description { get; set; }
 
     public byte[] Picture { get; set; } = null!;
-
+    public DateTime CreatedDate { get; set; }
     public Guid UserId { get; set; }
 
     public ICollection<PinTag> PinTags { get; set; } = null!;

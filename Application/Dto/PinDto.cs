@@ -5,6 +5,7 @@ namespace Application.Dto
 {
     public class PinDto
     {
+        public Guid Id { get; set; }
         [Required] public string Title { get; set; } = null!;
 
         [Required] public IFormFile PictureUpload { get; set; } = null!;

@@ -1,6 +1,7 @@
 ﻿using Application.AutoMapper;
 using Application.Interfaces;
 using Application.Services;
+using Domain.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,7 @@ public static class DependencyInjection
 
         services.AddTransient<ITestService, TestService>();
         services.AddTransient<IPinsService, PinsService>();
+        services.AddTransient<ICommentsService, CommentsService>();
 
         return services;
     }

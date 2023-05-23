@@ -24,6 +24,24 @@ namespace Application.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task AddComment(CommentDto commentDto)
+        {
+            var userClaim = _httpContextAccessor.HttpContext.User;
+            var user = await _userManager.GetUserAsync(userClaim);
+
+            if (user is null) return;
+
+            var pinComment = new PinComment
+            {
+                CommentMessage = commentDto.Message,
+                PinId = commentDto.Id,
+                UserId = user.Id
+            };
+
+            _unitOfWork.PinsComment.Add(pinComment);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
         public async Task CreatePin(PinDto pinDto)
         {
             var pin = _mapper.Map<Pin>(pinDto);
@@ -41,6 +59,13 @@ namespace Application.Services
         public async Task<List<PinDto>> GetPinsByTitleString(string query)
         {
             var pins = await _unitOfWork.Pins.GetPinsByTitleString(query);
+
+            return _mapper.Map<List<PinDto>>(pins);
+        }
+
+        public async Task<List<PinDto>> GetLastPins(int numberOfPins)
+        {
+            var pins = await _unitOfWork.Pins.GetLastPins(numberOfPins);
 
             return _mapper.Map<List<PinDto>>(pins);
         }

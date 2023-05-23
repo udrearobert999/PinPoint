@@ -58,6 +58,11 @@ public partial class PinPointContext : IdentityDbContext<User, IdentityRole<Guid
         {
             entity.HasKey(e => e.Id);
 
+            modelBuilder.Entity<Pin>()
+                .Property(pin => pin.CreatedDate)
+                .HasDefaultValue(DateTime.Now)
+                .IsRequired();
+
             entity.HasOne<Pin>(e => e.Pin)
                 .WithMany(e => e.PinComments)
                 .HasForeignKey(e => e.PinId);
