@@ -33,6 +33,21 @@ namespace PinPoint.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        public byte[] CurrentProfilePicture { get; set; }
+
+        public string CurrentProfilePictureBase64
+        {
+            get
+            {
+                if (CurrentProfilePicture != null)
+                {
+                    return Convert.ToBase64String(CurrentProfilePicture);
+                }
+
+                return null;
+            }
+        }
+
         [TempData]
         public string StatusMessage { get; set; }
 
@@ -56,6 +71,9 @@ namespace PinPoint.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Profile Image")]
+            public IFormFile ProfileImage { get; set; }
         }
 
         private async Task LoadAsync(User user)
@@ -64,10 +82,12 @@ namespace PinPoint.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
+            CurrentProfilePicture = user.ProfilePicture;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                ProfileImage = null
             };
         }
 
@@ -106,6 +126,14 @@ namespace PinPoint.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+
+            if (Input.ProfileImage != null)
+            {
+                using var memoryStream = new MemoryStream();
+                await Input.ProfileImage.CopyToAsync(memoryStream);
+                user.ProfilePicture = memoryStream.ToArray();
+                await _userManager.UpdateAsync(user);
             }
 
             await _signInManager.RefreshSignInAsync(user);

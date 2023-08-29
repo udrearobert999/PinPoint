@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Application.Dto;
 using PinPoint.ErrorHandling;
 using Application.Interfaces;
+using Domain.Entities;
 
 namespace PinPoint.Controllers
 {
@@ -42,7 +43,7 @@ namespace PinPoint.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         public async Task<IActionResult> Search(string titleQuery)
@@ -53,6 +54,7 @@ namespace PinPoint.Controllers
             }
 
             var pins = await _pinsService.GetPinsByTitleString(titleQuery);
+            ViewBag.SearchAttempted = true;
             return View("Index", pins);
         }
     }

@@ -1,4 +1,5 @@
-﻿using Application.Dto;
+﻿using System.Transactions;
+using Application.Dto;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using AutoMapper;
@@ -24,22 +25,32 @@ namespace Application.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task AddComment(CommentDto commentDto)
+        public async Task<CommentDto> AddComment(CommentDto createCommentDto)
         {
             var userClaim = _httpContextAccessor.HttpContext.User;
             var user = await _userManager.GetUserAsync(userClaim);
 
-            if (user is null) return;
+            if (user is null) return new CommentDto();
 
             var pinComment = new PinComment
             {
-                CommentMessage = commentDto.Message,
-                PinId = commentDto.Id,
+                CommentMessage = createCommentDto.CommentMessage,
+                PinId = createCommentDto.Id,
                 UserId = user.Id
             };
 
             _unitOfWork.PinsComment.Add(pinComment);
             await _unitOfWork.SaveChangesAsync();
+
+            var commentDto = new CommentDto
+            {
+                CommentMessage = createCommentDto.CommentMessage,
+                Id = createCommentDto.Id,
+                UserName = user.UserName!,
+                ProfilePicture = Convert.ToBase64String(user.ProfilePicture ?? Array.Empty<byte>())
+            };
+
+            return commentDto;
         }
 
         public async Task CreatePin(PinDto pinDto)
@@ -97,6 +108,29 @@ namespace Application.Services
                 _unitOfWork.Pins.Delete(pin);
                 await _unitOfWork.SaveChangesAsync();
             }
+        }
+
+        public async Task<List<CommentDto>> GetCommentsByPinId(Guid pinId)
+        {
+            var comments = await _unitOfWork.PinsComment.GetAsync(pinComment => pinComment.PinId == pinId);
+            var commentsDtos = new List<CommentDto>();
+            foreach (var comment in comments)
+            {
+                var user = await _userManager.FindByIdAsync(comment.UserId.ToString());
+                if (user is null)
+                    continue;
+
+                var commentDto = new CommentDto
+                {
+                    CommentMessage = comment.CommentMessage,
+                    Id = comment.Id,
+                    UserName = user.UserName!,
+                    ProfilePicture = Convert.ToBase64String(user.ProfilePicture ?? Array.Empty<byte>())
+                };
+                commentsDtos.Add(commentDto);
+            }
+
+            return commentsDtos;
         }
     }
 }

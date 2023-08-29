@@ -22,7 +22,7 @@ namespace Application.Services
             _userManager = userManager;
         }
 
-        public async Task AddComment(CommentDto commentDto)
+        public async Task AddComment(CommentDto createCommentDto)
         {
             var userClaim = _httpContextAccessor.HttpContext.User;
             var user = await _userManager.GetUserAsync(userClaim);
@@ -31,8 +31,8 @@ namespace Application.Services
 
             var pinComment = new PinComment
             {
-                CommentMessage = commentDto.Message,
-                PinId = commentDto.Id,
+                CommentMessage = createCommentDto.CommentMessage,
+                PinId = createCommentDto.Id,
                 UserId = user.Id
             };
 

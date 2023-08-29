@@ -22,10 +22,18 @@ namespace PinPoint.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddComment(CommentDto commentDto)
+        public async Task<IActionResult> AddComment(CommentDto createCommentDto)
         {
-            await _pinsService.AddComment(commentDto);
-            return RedirectToAction("Index"); // You might need to adjust this based on your project
+            var comment = await _pinsService.AddComment(createCommentDto);
+            return Ok(comment);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetComments(Guid pinId)
+        {
+            var comments = await _pinsService.GetCommentsByPinId(pinId);
+
+            return Ok(comments);
         }
 
         public async Task<IActionResult> Create(PinDto pinDto)
@@ -39,19 +47,19 @@ namespace PinPoint.Controllers
                 if (pinDto.Picture.Length > 0)
                 {
                     await _pinsService.CreatePin(pinDto);
-                    TempData["Message"] = "Pin was successfully created.";
+                    TempData["CommentMessage"] = "Pin was successfully created.";
 
                     return RedirectToAction("Index");
                 }
             }
             catch (Exception ex)
             {
-                TempData["Message"] = "Failed to create pin.";
+                TempData["CommentMessage"] = "Failed to create pin.";
 
                 return RedirectToAction("Index");
             }
 
-            TempData["Message"] = "Failed to create pin. No picture was provided.";
+            TempData["CommentMessage"] = "Failed to create pin. No picture was provided.";
             return RedirectToAction("Index");
         }
     }

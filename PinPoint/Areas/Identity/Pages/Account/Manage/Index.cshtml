@@ -2,29 +2,94 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Profile";
-    ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h3>@ViewData["Title"]</h3>
+<style>
+    html {
+        font-size: 16px;
+    }
+    .profile-image-container {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        overflow: hidden;
+        border-radius: 50%; /* Circular image */
+        margin: 20px auto; /* Center the container */
+        cursor: pointer;
+        background-color: #f7f7f7; /* Light gray background */
+    }
+
+    .profile-image {
+        width: 100%;
+        height: 100%;
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Black overlay with 50% opacity */
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .profile-image-container:hover .image-overlay {
+        opacity: 1;
+    }
+
+    #profileImageInput {
+        display: none; /* Hide the actual input */
+    }
+
+</style>
+
+<h3 class="text-center">@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
-<div class="row">
+
+<div class="row justify-content-center">
     <div class="col-md-6">
-        <form id="profile-form" method="post">
+        <form id="profile-form" method="post" enctype="multipart/form-data" class="mt-3">
+            <div class="profile-image-container" onclick="document.getElementById('profileImageInput').click();">
+                <img src="data:image/jpeg;base64,@Model.CurrentProfilePictureBase64" class="profile-image" id="profilePicture" alt="Profile Picture" />
+                <div class="image-overlay">Edit picture</div>
+            </div>
+
+            <input type="file" id="profileImageInput" asp-for="Input.ProfileImage" onchange="previewImage(event)" />
+
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
             <div class="form-floating mb-3">
                 <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
                 <label asp-for="Username" class="form-label"></label>
             </div>
+
             <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary mt-3">Save</button>
         </form>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('profilePicture');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 }

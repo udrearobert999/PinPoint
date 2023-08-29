@@ -9,7 +9,9 @@ namespace Application.Dto
     public class CommentDto
     {
         public Guid Id { get; set; }
-        public string Message { get; set; } = null!;
+        public string CommentMessage { get; set; } = null!;
         public string UserName { get; set; } = null!;
+
+        public string ProfilePicture { get; set; } = null!;
     }
 }

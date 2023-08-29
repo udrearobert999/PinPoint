@@ -2,6 +2,12 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Domain.Entities
 @inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    string profileImageSrc = user?.ProfilePicture != null ? "data:image/png;base64," + Convert.ToBase64String(user.ProfilePicture) : "~/icons/default-profile.jpg";
+}
 
 <link rel="stylesheet" href="~/css/pages/partial/nav-login-partial.css" asp-append-version="true"/>
 
@@ -13,7 +19,7 @@
         </li>
         <li class="nav-item profile-wrapper">
             <div class="nav-avatar" id="nav-avatar">
-                <img class="nav-avatar-image" src="~/icons/avatar-ex.jpg" alt="nav-avatar"/>
+                <img class="nav-avatar-image" src="@profileImageSrc" alt="nav-avatar" />
             </div>
             <ul class="nav-avatar-dropdown" id="nav-avatar-dropdown" hidden="true">
                 <li class="nav-avatar-dropdown-item" id="profile-action">

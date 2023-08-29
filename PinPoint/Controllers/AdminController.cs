@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace PinPoint.Controllers
 {
-    [Authorize(Roles=("ADMIN"))]
+    [Authorize(Roles=("Admin"))]
     public class AdminController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -37,7 +37,7 @@ namespace PinPoint.Controllers
         {
             if (model.SelectedRole.IsNullOrEmpty() || model.SelectedUser.IsNullOrEmpty())
             {
-                TempData["Message"] = "User or role not selected";
+                TempData["CommentMessage"] = "User or role not selected";
                 return RedirectToAction("AdminPanel");
             }
 
@@ -49,16 +49,16 @@ namespace PinPoint.Controllers
                 var result = await _userManager.AddToRoleAsync(user, model.SelectedRole);
                 if (result.Succeeded)
                 {
-                    TempData["Message"] = "User was successfully added to the role.";
+                    TempData["CommentMessage"] = "User was successfully added to the role.";
                 }
                 else
                 {
-                    TempData["Message"] = "Failed to add user to the role.";
+                    TempData["CommentMessage"] = "Failed to add user to the role.";
                 }
             }
             else
             {
-                TempData["Message"] = "User not found.";
+                TempData["CommentMessage"] = "User not found.";
             }
 
             return RedirectToAction("AdminPanel");
@@ -69,7 +69,7 @@ namespace PinPoint.Controllers
         {
             if (model.SelectedRole.IsNullOrEmpty() || model.SelectedUser.IsNullOrEmpty())
             {
-                TempData["Message"] = "User or role not selected";
+                TempData["CommentMessage"] = "User or role not selected";
                 return RedirectToAction("AdminPanel");
             }
 
@@ -80,16 +80,16 @@ namespace PinPoint.Controllers
                 var result = await _userManager.RemoveFromRoleAsync(user, model.SelectedRole);
                 if (result.Succeeded)
                 {
-                    TempData["Message"] = "User was successfully removed from the role.";
+                    TempData["CommentMessage"] = "User was successfully removed from the role.";
                 }
                 else
                 {
-                    TempData["Message"] = "Failed to remove user from the role.";
+                    TempData["CommentMessage"] = "Failed to remove user from the role.";
                 }
             }
             else
             {
-                TempData["Message"] = "User not found.";
+                TempData["CommentMessage"] = "User not found.";
             }
 
             return RedirectToAction("AdminPanel");

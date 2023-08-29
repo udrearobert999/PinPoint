@@ -10,6 +10,6 @@ namespace Application.Interfaces
 {
     public interface ICommentsService
     {
-        public Task AddComment(CommentDto commentDto);
+        public Task AddComment(CommentDto createCommentDto);
     }
 }

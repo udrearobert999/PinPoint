@@ -13,6 +13,9 @@
 
 }
 
+<link rel="stylesheet" href="~/css/pages/login.css" asp-append-version="true"/>
+<link rel="stylesheet" href="~/css/components/button.css" asp-append-version="true"/>
+
 <div class="container">
     <div class="row">
         @if (Model.Any())
@@ -21,11 +24,27 @@
             {
                 <div class="col-md-4">
                     <div class="pin-item mb-4">
-                        <img src="data:image/png;base64,@ByteArrayToBase64(pin.Picture)" alt="@pin.Title" class="pin-image" onclick="openModal(this)" id="@pin.Id">
+                        <img src="data:image/png;base64,@ByteArrayToBase64(pin.Picture)" alt="@pin.Title" class="pin-image" id="@pin.Id">
                         <h5 class="pin-title">@pin.Title</h5>
                     </div>
                 </div>
             }
+        }
+        else if (ViewBag.SearchAttempted == true)
+        {
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    <strong>No pins found!</strong> Your search did not return any results.
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    <strong>No pins available!</strong> There are currently no pins to display.
+                </div>
+            </div>
         }
     </div>
 </div>
@@ -38,31 +57,11 @@
         </div>
         <div class="comments-container">
             <div class="comments-list">
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
-                <p>asdasd</p>
             </div>
-            <form id="comment-form" method="POST" action="@Url.Action("AddComment", "Pins")">
-                <div class="input-container">
-                    <input type="text" id="comment-input" name="Message" placeholder="Add a comment...">
-                    <input type="hidden" id="pinId" name="Id" value=""> <!-- You will need to set this value with JavaScript when the modal is opened -->
-                    <button type="submit">Submit</button>
+            <form id="comment-form" method="POST">
+                <div class="input-wrapper">
+                    <input class="input" name="CommentMessage" aria-required="true" placeholder="Comment..."/>
+                    <input type="hidden" name="Id" id="pinId"/>
                 </div>
             </form>
         </div>
@@ -72,6 +71,10 @@
 <div class="overlay hidden"></div>
 
 <style>
+    body {
+        font-size: 16px;
+    }
+
     .pin-item {
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         border-radius: 6px;
@@ -80,6 +83,15 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+    
+    .input-wrapper {
+        width: 100%;
+    }
+    
+    .pin-item:hover {
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.3s ease;
     }
 
     .pin-image {
@@ -146,7 +158,6 @@
     .picture-container,
     .comments-container {
         flex: 1;
-        overflow-y: auto;
         padding: 1rem;
     }
 
@@ -177,18 +188,84 @@
         box-sizing: border-box;
         margin-top: 1.5rem
     }
+    
+    .comment {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+        .comment img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+    .comment-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .comment-name {
+        font-weight: bold;
+    }
+
+    .comment-message {
+        margin-top: 5px;
+    }
 </style>
 
 <script>
     const modal = document.querySelector(".modal");
     const overlay = document.querySelector(".overlay");
     const closeModalBtn = document.querySelector(".btn-close");
+    const commentForm = document.getElementById('comment-form');
+    const commentsList = document.querySelector(".comments-list");
+    
+    closeModalBtn.addEventListener("click", closeModal);
+    overlay.addEventListener("click", closeModal);
 
-    function openModal(element) {
+    // Loop through each element and add a click event listener
+    const pinImages = document.querySelectorAll('.pin-image');
+    pinImages.forEach(pinImage => {
+        pinImage.addEventListener('click', async function () {
+            await openModal(this);
+        });
+    });
+    
+    commentForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+
+        try {
+            const response = await fetch('/Pins/AddComment', {
+                method: this.method,
+                body: formData,
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+            
+            if (response.ok) {
+                addCommentToList(await response.json(), commentsList);
+            } else {
+                console.error("Error submitting comment:", response.statusText);
+            }
+        } catch (error) {
+            console.error("There was an error:", error);
+        }
+    });
+
+    async function openModal(element) {
         modal.classList.remove("hidden");
         overlay.classList.remove("hidden");
         document.getElementById('picture').src = element.src;
-        document.getElementById('pinId').value = element.id; // Set the pinId here
+        const pinId = element.id;
+        document.getElementById('pinId').value = pinId;
+
+        const comments = await fetchComments(pinId);
+        renderComments(comments);
     };
 
     function closeModal() {
@@ -196,6 +273,50 @@
         overlay.classList.add("hidden");
     };
 
-    closeModalBtn.addEventListener("click", closeModal);
-    overlay.addEventListener("click", closeModal);
+    async function fetchComments(pinId) {
+        const response = await fetch(`/Pins/GetComments?pinId=${pinId}`);
+        const comments = await response.json();
+        return comments;
+    }
+    
+    function addCommentToList(comment, commentsList) {
+        const commentDiv = document.createElement('div');
+        commentDiv.className = 'comment';
+
+        const profileImg = document.createElement('img');
+        profileImg.src = `data:image/png;base64,${comment.profilePicture}`;
+
+        const commentContentDiv = document.createElement('div');
+        commentContentDiv.className = 'comment-content';
+
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'comment-name';
+        nameDiv.textContent = comment.userName;
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'comment-message';
+        messageDiv.textContent = comment.commentMessage;
+
+        commentContentDiv.appendChild(nameDiv);
+        commentContentDiv.appendChild(messageDiv);
+
+        commentDiv.appendChild(profileImg);
+        commentDiv.appendChild(commentContentDiv);
+        
+        commentsList.appendChild(commentDiv);
+
+        return commentDiv;
+    }
+
+    function renderComments(comments) {
+        while (commentsList.firstChild) {
+            commentsList.removeChild(commentsList.firstChild);
+        }
+        
+        comments.forEach(comment => {
+            if (comment.commentMessage && comment.userName) {
+                addCommentToList(comment, commentsList)
+            }
+        });
+    }
 </script>
