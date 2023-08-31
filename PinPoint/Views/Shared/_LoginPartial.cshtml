@@ -36,7 +36,7 @@
                         <p>Settings</p>
                     </div>
                 </li>
-                @if (SignInManager.IsSignedIn(User) && User.IsInRole("ADMIN"))
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                 {
                     <li class="nav-avatar-dropdown-item">
                         <form asp-area="Identity" asp-controller="Admin" asp-action="AdminPanel" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
