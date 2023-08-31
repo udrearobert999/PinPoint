@@ -1,4 +1,8 @@
-﻿@model List<Application.Dto.PinDto>
+﻿@using Domain.Entities
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<Application.Dto.PinDto>
+@inject SignInManager<User> SignInManager
 
 @{
     Layout = "_NavLayout";
@@ -18,7 +22,7 @@
 
 <div class="container">
     <div class="row">
-        @if (Model.Any())
+        @if (Model.Any() && SignInManager.IsSignedIn(User))
         {
             foreach (var pin in Model)
             {
@@ -32,16 +36,24 @@
         }
         else if (ViewBag.SearchAttempted == true)
         {
-            <div class="col-md-12">
-                <div class="alert alert-info">
+            <div class="col-md-12 justify-content-center text-center">
+                <div class="alert alert-info justify-content-center text-center">
                     <strong>No pins found!</strong> Your search did not return any results.
+                </div>
+            </div>
+        }
+        else if (!SignInManager.IsSignedIn(User))
+        {
+            <div class="col-md-12 justify-content-center text-center">
+                <div class="alert alert-info justify-content-center text-center">
+                    <strong>No pins available!</strong> Please login first.
                 </div>
             </div>
         }
         else
         {
-            <div class="col-md-12">
-                <div class="alert alert-info">
+            <div class="col-md-12 justify-content-center text-center">
+                <div class="alert alert-info justify-content-center text-center">
                     <strong>No pins available!</strong> There are currently no pins to display.
                 </div>
             </div>

@@ -4,6 +4,7 @@ using Application.Dto;
 using PinPoint.ErrorHandling;
 using Application.Interfaces;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PinPoint.Controllers
 {
@@ -46,6 +47,7 @@ namespace PinPoint.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [Authorize]
         public async Task<IActionResult> Search(string titleQuery)
         {
             if (string.IsNullOrEmpty(titleQuery))
